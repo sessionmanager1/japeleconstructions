@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JAPELE Construction Company Ltd — Building Tomorrow, Today</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --white:#FFFFFF;
+    --charcoal:#111111;
+    --graphite:#3B3B3B;
+    --silver:#C8C8C8;
+    --gold:#D4AF37;
+    --gold-soft:#e8cd7a;
+    --blue:#0A84FF;
+
+    --bg:#0c0c0c;
+    --bg-elev:#141414;
+    --surface:#1a1a1a;
+    --text:#f4f3f0;
+    --text-dim:#a9a6a0;
+    --line:rgba(255,255,255,.10);
+    --card:#161616;
+  }
+  html[data-theme="light"]{
+    --bg:#fbfaf8;
+    --bg-elev:#ffffff;
+    --surface:#ffffff;
+    --text:#161513;
+    --text-dim:#5c5850;
+    --line:rgba(17,17,17,.10);
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Manrope',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    transition:background .4s ease, color .4s ease;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:.001s !important; transition-duration:.001s !important;}
+  }
+  .serif{font-family:'Fraunces',serif;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img,svg{display:block; max-width:100%;}
+  .wrap{max-width:1220px; margin:0 auto; padding:0 32px;}
+  section{position:relative;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--gold); display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--gold);}
+  h1,h2,h3{font-weight:500; line-height:1.05;}
+  .btn{
+    display:inline-flex; align-items:center; gap:10px; justify-content:center;
+    padding:16px 30px; border-radius:100px; font-weight:700; font-size:15px;
+    cursor:pointer; border:1px solid transparent; transition:all .35s cubic-bezier(.2,.8,.2,1);
+    white-space:nowrap;
+  }
+  .btn-gold{background:var(--gold); color:#161200;}
+  .btn-gold:hover{background:var(--gold-soft); transform:translateY(-2px); box-shadow:0 14px 30px -10px rgba(212,175,55,.55);}
+  .btn-ghost{background:transparent; border-color:var(--line); color:var(--text); backdrop-filter:blur(6px);}
+  .btn-ghost:hover{border-color:var(--gold); color:var(--gold); transform:translateY(-2px);}
+  .btn-sm{padding:11px 20px; font-size:13.5px;}
+
+  /* progress bar */
+  #progress{position:fixed; top:0; left:0; height:2.5px; background:linear-gradient(90deg,var(--gold),var(--blue)); width:0%; z-index:9999;}
+
+  /* loader */
+  #loader{
+    position:fixed; inset:0; background:var(--charcoal); z-index:10000;
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px;
+    transition:opacity .7s ease, visibility .7s ease;
+  }
+  #loader.hide{opacity:0; visibility:hidden;}
+  .loader-mark{width:56px; height:56px; position:relative;}
+  .loader-mark svg{width:100%; height:100%;}
+  .loader-mark path{stroke-dasharray:200; stroke-dashoffset:200; animation:draw 1.4s ease forwards infinite;}
+  @keyframes draw{ to{stroke-dashoffset:0;} }
+  .loader-label{font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.3em; color:var(--gold); text-transform:uppercase;}
+
+  /* nav */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:900;
+    padding:20px 0; transition:all .4s ease;
+  }
+  header.scrolled{
+    background:color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter:blur(16px) saturate(150%);
+    border-bottom:1px solid var(--line);
+    padding:14px 0;
+  }
+  nav{display:flex; align-items:center; justify-content:space-between;}
+  .logo{display:flex; align-items:center; gap:11px; font-weight:700; font-size:17px; letter-spacing:.02em;}
+  .logo-mark{width:34px; height:34px; flex:none;}
+  .logo span.j{color:var(--gold);}
+  .navlinks{display:flex; align-items:center; gap:36px;}
+  .navlinks a{font-size:14px; font-weight:600; color:var(--text-dim); position:relative; padding:4px 0;}
+  .navlinks a:hover{color:var(--text);}
+  .navlinks a::after{content:""; position:absolute; left:0; bottom:-2px; width:0; height:1px; background:var(--gold); transition:width .3s ease;}
+  .navlinks a:hover::after{width:100%;}
+  .navcta{display:flex; align-items:center; gap:14px;}
+  .theme-toggle{
+    width:38px; height:38px; border-radius:50%; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; background:transparent; color:var(--text);
+  }
+  .burger{display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none;}
+  .burger span{width:24px; height:2px; background:var(--text);}
+
+  /* HERO */
+  .hero{
+    min-height:100vh; display:flex; align-items:center; position:relative;
+    background:
+      radial-gradient(ellipse at 70% 20%, rgba(212,175,55,.14), transparent 55%),
+      linear-gradient(180deg, rgba(10,10,10,.55) 0%, rgba(10,10,10,.72) 55%, rgba(10,10,10,.96) 100%),
+      url('https://files.catbox.moe/amgc7b.jpg') center 30%/cover no-repeat,
+      var(--charcoal);
+    color:#f4f3f0; overflow:hidden; padding-top:120px;
+  }
+  html[data-theme="light"] .hero{ color:#f4f3f0;}
+  .blueprint-grid{position:absolute; inset:0; opacity:.35; pointer-events:none;}
+  .blueprint-grid svg{width:100%; height:100%;}
+  .hero-inner{position:relative; z-index:2; display:grid; grid-template-columns:1.15fr .85fr; gap:60px; align-items:end; padding-bottom:90px;}
+  .hero h1{font-size:clamp(42px,6vw,84px); font-weight:400; letter-spacing:-.02em;}
+  .hero h1 em{font-style:normal; color:var(--gold);}
+  .hero-sub{color:#c9c6bf; font-size:17px; line-height:1.7; max-width:480px; margin:26px 0 38px;}
+  .hero-actions{display:flex; gap:16px; flex-wrap:wrap;}
+  .hero-skyline{position:relative;}
+  .hero-skyline svg{width:100%; height:auto;}
+  .scroll-cue{
+    position:absolute; bottom:34px; left:32px; display:flex; align-items:center; gap:12px;
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:#8f8c85; z-index:2;
+  }
+  .scroll-line{width:1px; height:40px; background:linear-gradient(var(--gold), transparent); animation:scrolldown 1.8s ease-in-out infinite;}
+  @keyframes scrolldown{ 0%,100%{transform:scaleY(1); opacity:.4;} 50%{transform:scaleY(1.3); opacity:1;} }
+
+  /* STATS */
+  .stats{background:var(--gold); color:#161200;}
+  .stats .wrap{display:grid; grid-template-columns:repeat(5,1fr); padding:44px 32px; gap:20px;}
+  .stat{text-align:center;}
+  .stat b{font-family:'Fraunces',serif; font-size:clamp(28px,3.4vw,46px); font-weight:500; display:block;}
+  .stat span{font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; opacity:.75;}
+
+  /* generic section spacing */
+  .section{padding:120px 0;}
+  .section-head{max-width:640px; margin-bottom:60px;}
+  .section-head h2{font-size:clamp(30px,4vw,46px); margin-top:16px; letter-spacing:-.01em;}
+  .section-head p{color:var(--text-dim); margin-top:18px; font-size:16px; line-height:1.7;}
+  .head-row{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap;}
+
+  /* SERVICES */
+  .services-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:20px; overflow:hidden;}
+  .service-card{background:var(--card); padding:34px 28px; transition:background .35s ease; position:relative;}
+  .service-card:hover{background:var(--bg-elev);}
+  .service-card .num{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--gold); letter-spacing:.1em;}
+  .service-icon{width:38px; height:38px; margin:18px 0 20px; color:var(--gold);}
+  .service-card h3{font-size:17px; font-weight:700; font-family:'Manrope';}
+  .service-card p{font-size:13.5px; color:var(--text-dim); margin-top:10px; line-height:1.6;}
+  .service-more{margin-top:44px; text-align:center;}
+
+  /* SERVICES MEDIA */
+  .services-media{
+    position:relative; border-radius:20px; overflow:hidden; border:1px solid var(--line);
+    aspect-ratio:21/8; margin:44px 0 54px; background:var(--surface);
+  }
+  .services-media img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .8s cubic-bezier(.2,.8,.2,1);}
+  .services-media:hover img{transform:scale(1.04);}
+  .services-media::after{content:""; position:absolute; inset:0; background:linear-gradient(100deg, rgba(10,10,10,.72) 0%, rgba(10,10,10,.28) 45%, transparent 70%);}
+  .services-media-text{position:absolute; left:34px; top:0; bottom:0; display:flex; flex-direction:column; justify-content:center; z-index:2; max-width:360px;}
+  .services-media-text .eyebrow{color:var(--gold-soft);}
+  .services-media-text h3{color:#fff; font-size:clamp(20px,2.4vw,28px); margin-top:12px; font-family:'Fraunces',serif; font-weight:400;}
+  .services-media-text p{color:#d9d6cd; font-size:13.5px; margin-top:10px; line-height:1.6;}
+  @media (max-width:600px){
+    .services-media{aspect-ratio:4/5;}
+    .services-media-text{left:22px; right:22px; max-width:none;}
+  }
+
+  /* WHY CHOOSE */
+  .why{background:var(--charcoal); color:#f4f3f0;}
+  .why .wrap{display:grid; grid-template-columns:.85fr 1.15fr; gap:70px;}
+  .why-left h2{font-size:clamp(30px,4vw,44px);}
+  .why-left p{color:#b9b6ae; margin-top:20px; line-height:1.75; max-width:420px;}
+  .why-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.08); border-radius:18px; overflow:hidden;}
+  .why-item{background:#171717; padding:26px; display:flex; gap:16px; align-items:flex-start;}
+  .why-item .ico{width:22px; height:22px; color:var(--gold); flex:none; margin-top:2px;}
+  .why-item h4{font-size:14.5px; font-weight:700;}
+  .why-item p{font-size:12.5px; color:#9a978f; margin-top:6px; line-height:1.5;}
+
+  /* PROJECTS */
+  .proj-filters{display:flex; gap:10px; flex-wrap:wrap;}
+  .chip{padding:9px 18px; border-radius:100px; border:1px solid var(--line); font-size:13px; font-weight:600; cursor:pointer; background:transparent; color:var(--text-dim);}
+  .chip.active{background:var(--gold); border-color:var(--gold); color:#161200;}
+  .proj-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:50px;}
+  .proj-card{
+    border-radius:18px; overflow:hidden; position:relative; border:1px solid var(--line);
+    aspect-ratio:4/5; background:var(--surface);
+  }
+  .proj-card:nth-child(3n+2){aspect-ratio:4/5.9;}
+  .proj-visual{position:absolute; inset:0;}
+  .proj-visual svg{width:100%; height:100%;}
+  .proj-overlay{
+    position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:26px;
+    background:linear-gradient(180deg, transparent 30%, rgba(0,0,0,.86) 100%);
+  }
+  .proj-tag{
+    align-self:flex-start; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.1em;
+    text-transform:uppercase; color:#161200; background:var(--gold); padding:5px 10px; border-radius:6px; margin-bottom:auto;
+  }
+  .proj-overlay h3{color:#fff; font-size:19px; font-weight:700;}
+  .proj-overlay .meta{color:#cfccc4; font-size:12.5px; margin-top:6px; display:flex; gap:14px;}
+  .proj-view{
+    position:absolute; top:24px; right:24px; width:40px; height:40px; border-radius:50%;
+    background:rgba(255,255,255,.14); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:translateY(-6px); transition:all .35s ease; color:#fff;
+  }
+  .proj-card:hover .proj-view{opacity:1; transform:translateY(0);}
+  .proj-card:hover .proj-visual{transform:scale(1.06);}
+  .proj-visual{transition:transform .6s cubic-bezier(.2,.8,.2,1);}
+
+  /* SHOWCASE (real photography) */
+  .showcase-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:26px; margin-top:50px;}
+  .showcase-img{border-radius:20px; overflow:hidden; position:relative; border:1px solid var(--line); background:var(--surface);}
+  .showcase-img.tall{aspect-ratio:4/5;}
+  .showcase-img.wide{aspect-ratio:16/9; align-self:end;}
+  .showcase-img img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .8s cubic-bezier(.2,.8,.2,1);}
+  .showcase-img:hover img{transform:scale(1.05);}
+  .showcase-tag{
+    position:absolute; top:20px; left:20px; background:rgba(17,17,17,.55); backdrop-filter:blur(8px);
+    color:#fff; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+    padding:8px 14px; border-radius:100px; border:1px solid rgba(255,255,255,.2);
+  }
+
+  /* VIDEO REVIEWS */
+  .video-grid{display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:50px;}
+  .video-card{
+    position:relative; border-radius:20px; overflow:hidden; aspect-ratio:16/10; border:1px solid var(--line);
+    background:var(--charcoal); cursor:pointer;
+  }
+  .video-card video{width:100%; height:100%; object-fit:cover; opacity:.75; transition:opacity .4s ease, transform .6s ease;}
+  .video-card:hover video{opacity:.95; transform:scale(1.03);}
+  .video-card::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.75) 100%);}
+  .video-play{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:2;
+    width:74px; height:74px; border-radius:50%; background:rgba(212,175,55,.92); backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center; transition:all .35s ease; box-shadow:0 14px 34px -8px rgba(0,0,0,.6);
+  }
+  .video-card:hover .video-play{background:var(--gold); transform:translate(-50%,-50%) scale(1.08);}
+  .video-play svg{margin-left:4px;}
+  .video-info{position:absolute; left:22px; bottom:20px; z-index:2; color:#fff;}
+  .video-info h4{font-size:16px; font-weight:700;}
+  .video-info span{font-size:12px; color:#d9d6cd; font-family:'JetBrains Mono',monospace; letter-spacing:.06em;}
+  .video-watch-btn{
+    position:absolute; right:20px; bottom:20px; z-index:2;
+    display:flex; align-items:center; gap:8px; padding:10px 18px; border-radius:100px;
+    background:rgba(255,255,255,.14); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.25);
+    color:#fff; font-size:12.5px; font-weight:700;
+  }
+
+  /* VIDEO MODAL */
+  #videoModal{
+    position:fixed; inset:0; z-index:9998; background:rgba(6,6,6,.94); backdrop-filter:blur(6px);
+    display:none; align-items:center; justify-content:center; padding:26px;
+  }
+  #videoModal.open{display:flex;}
+  .modal-inner{width:100%; max-width:920px; position:relative;}
+  .modal-inner video{width:100%; border-radius:16px; max-height:82vh; background:#000;}
+  .modal-close{
+    position:absolute; top:-46px; right:0; width:38px; height:38px; border-radius:50%;
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); color:#fff;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .modal-close:hover{background:var(--gold); color:#161200; border-color:var(--gold);}
+
+  /* TESTIMONIALS */
+  .testi-wrap{position:relative; max-width:760px; margin:0 auto; text-align:center;}
+  .quote-mark{font-family:'Fraunces',serif; font-size:80px; color:var(--gold); line-height:1; opacity:.5;}
+  .testi-slide{display:none;}
+  .testi-slide.active{display:block; animation:fadeUp .6s ease;}
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+  .testi-slide p{font-family:'Fraunces',serif; font-size:clamp(20px,2.6vw,28px); font-weight:400; line-height:1.5; color:var(--text);}
+  .stars{color:var(--gold); letter-spacing:4px; margin-top:22px; font-size:16px;}
+  .testi-who{margin-top:18px; font-weight:700; font-size:14.5px;}
+  .testi-proj{color:var(--text-dim); font-size:12.5px; margin-top:2px;}
+  .testi-dots{display:flex; gap:8px; justify-content:center; margin-top:36px;}
+  .dot{width:8px; height:8px; border-radius:50%; background:var(--line); cursor:pointer; transition:all .3s ease;}
+  .dot.active{background:var(--gold); width:22px; border-radius:5px;}
+
+  /* QUOTE */
+  .quote-section{background:var(--charcoal); color:#f4f3f0;}
+  .quote-grid{display:grid; grid-template-columns:.8fr 1.2fr; gap:0; border-radius:22px; overflow:hidden; border:1px solid rgba(255,255,255,.1);}
+  .quote-left{background:#171717; padding:56px 44px; position:relative;}
+  .quote-left h2{font-size:clamp(26px,3vw,36px); line-height:1.15;}
+  .quote-left p{color:#a9a69f; margin-top:18px; line-height:1.7; font-size:14.5px;}
+  .quote-points{margin-top:36px; display:flex; flex-direction:column; gap:16px;}
+  .quote-points li{display:flex; gap:12px; align-items:flex-start; font-size:13.5px; color:#d5d3cb;}
+  .quote-points svg{width:18px; height:18px; color:var(--gold); flex:none; margin-top:2px;}
+  .quote-right{background:#fbfaf8; color:#161513; padding:56px 44px;}
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .form-field{display:flex; flex-direction:column; gap:8px; margin-bottom:18px;}
+  .form-field.full{grid-column:1/-1;}
+  .form-field label{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#6b675f;}
+  .form-field input, .form-field select, .form-field textarea{
+    border:1px solid #e3e0d8; background:#fff; border-radius:10px; padding:13px 15px; font-size:14.5px;
+    font-family:'Manrope'; color:#161513; outline:none; transition:border-color .25s ease;
+  }
+  .form-field input:focus, .form-field select:focus, .form-field textarea:focus{border-color:var(--gold);}
+  .upload{
+    border:1.5px dashed #d8d4c9; border-radius:10px; padding:22px; text-align:center; font-size:13px; color:#7c7869; cursor:pointer;
+  }
+  .upload:hover{border-color:var(--gold); color:var(--gold);}
+
+  /* CONTACT */
+  .contact-grid{display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;}
+  .contact-list{display:flex; flex-direction:column; gap:22px; margin-top:30px;}
+  .contact-item{display:flex; gap:16px; align-items:flex-start; padding:18px 0; border-bottom:1px solid var(--line);}
+  .contact-item .ico{width:22px; height:22px; color:var(--gold); flex:none;}
+  .contact-item h4{font-size:14px; font-weight:700;}
+  .contact-item a, .contact-item span{font-size:14.5px; color:var(--text-dim);}
+  .contact-item a:hover{color:var(--gold);}
+  .map-block{
+    aspect-ratio:1/1; border-radius:20px; border:1px solid var(--line); position:relative; overflow:hidden;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0/32px 32px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0/32px 32px,
+      var(--surface);
+  }
+  .map-pin{position:absolute; top:46%; left:52%; width:16px; height:16px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 8px rgba(212,175,55,.18);}
+  .map-note{position:absolute; bottom:20px; left:20px; right:20px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; font-size:12.5px; color:var(--text-dim);}
+
+  /* NEWS */
+  .news-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:50px;}
+  .news-card{border:1px solid var(--line); border-radius:18px; overflow:hidden; background:var(--card);}
+  .news-visual{aspect-ratio:16/10; position:relative;}
+  .news-visual svg{width:100%; height:100%;}
+  .news-body{padding:26px;}
+  .news-date{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--gold); letter-spacing:.08em;}
+  .news-body h3{font-size:17px; margin-top:10px; font-weight:700;}
+  .news-body p{font-size:13.5px; color:var(--text-dim); margin-top:10px; line-height:1.6;}
+
+  /* CTA band */
+  .cta-band{background:linear-gradient(120deg, var(--gold), #b6902a); color:#161200; text-align:center;}
+  .cta-band h2{font-size:clamp(28px,4vw,46px); max-width:700px; margin:0 auto;}
+  .cta-band p{margin-top:16px; opacity:.8; font-size:15px;}
+  .cta-band .hero-actions{justify-content:center; margin-top:32px;}
+  .cta-band .btn-ghost{border-color:rgba(22,18,0,.35); color:#161200;}
+
+  /* FOOTER */
+  footer{background:var(--charcoal); color:#c9c6bf; padding:80px 0 30px;}
+  .foot-grid{display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; padding-bottom:60px; border-bottom:1px solid rgba(255,255,255,.08);}
+  .foot-brand p{margin-top:16px; font-size:13.5px; color:#8f8c85; max-width:280px; line-height:1.7;}
+  .foot-col h4{font-size:12.5px; text-transform:uppercase; letter-spacing:.1em; color:var(--gold); margin-bottom:18px;}
+  .foot-col li{margin-bottom:11px; font-size:13.5px; color:#a9a6a0;}
+  .foot-col a:hover{color:#fff;}
+  .foot-bottom{display:flex; justify-content:space-between; align-items:center; padding-top:26px; flex-wrap:wrap; gap:14px; font-size:12.5px; color:#75726b;}
+  .socials{display:flex; gap:12px;}
+  .socials a{width:36px; height:36px; border:1px solid rgba(255,255,255,.12); border-radius:50%; display:flex; align-items:center; justify-content:center;}
+  .socials a:hover{border-color:var(--gold); color:var(--gold);}
+
+  /* floating whatsapp */
+  .wa-float{
+    position:fixed; bottom:26px; right:26px; z-index:800; width:58px; height:58px; border-radius:50%;
+    background:#25D366; display:flex; align-items:center; justify-content:center; box-shadow:0 10px 26px -8px rgba(0,0,0,.5);
+    animation:pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{box-shadow:0 10px 26px -8px rgba(37,211,102,.6);} 50%{box-shadow:0 10px 34px -4px rgba(37,211,102,.9);} }
+
+  /* cookie */
+  #cookie{
+    position:fixed; bottom:20px; left:20px; max-width:360px; background:var(--card); border:1px solid var(--line);
+    border-radius:16px; padding:20px; z-index:850; box-shadow:0 20px 40px -14px rgba(0,0,0,.5);
+    transform:translateY(140%); transition:transform .5s cubic-bezier(.2,.8,.2,1);
+  }
+  #cookie.show{transform:translateY(0);}
+  #cookie p{font-size:12.5px; color:var(--text-dim); line-height:1.6;}
+  #cookie .row{display:flex; gap:10px; margin-top:14px;}
+
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1);}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  @media (max-width:980px){
+    .navlinks, .navcta .btn{display:none;}
+    .burger{display:flex;}
+    .hero-inner{grid-template-columns:1fr; padding-bottom:60px;}
+    .hero-skyline{order:-1; opacity:.5;}
+    .stats .wrap{grid-template-columns:repeat(2,1fr);}
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+    .why .wrap{grid-template-columns:1fr;}
+    .proj-grid{grid-template-columns:1fr 1fr;}
+    .showcase-grid, .video-grid{grid-template-columns:1fr;}
+    .showcase-img.wide, .showcase-img.tall{aspect-ratio:16/10;}
+    .quote-grid{grid-template-columns:1fr;}
+    .contact-grid{grid-template-columns:1fr;}
+    .news-grid{grid-template-columns:1fr;}
+    .foot-grid{grid-template-columns:1fr 1fr;}
+    .form-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:600px){
+    .proj-grid{grid-template-columns:1fr;}
+    .services-grid{grid-template-columns:1fr;}
+    .stats .wrap{grid-template-columns:1fr 1fr; padding:32px 24px;}
+    .section{padding:80px 0;}
+    .wrap{padding:0 20px;}
+    .quote-left, .quote-right{padding:36px 26px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-mark">
+    <svg viewBox="0 0 60 60" fill="none"><path d="M8 44 L8 20 L30 8 L52 20 L52 44 M20 44 V28 H40 V44" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="loader-label">JAPELE · Loading</div>
+</div>
+
+<div id="progress"></div>
+
+<header id="siteHeader">
+  <div class="wrap">
+    <nav>
+      <a href="#home" class="logo">
+        <svg class="logo-mark" viewBox="0 0 40 40" fill="none"><path d="M6 30 L6 14 L20 6 L34 14 L34 30 M13 30 V19 H27 V30" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        JA<span class="j">PELE</span>&nbsp;CONSTRUCTION
+      </a>
+      <div class="navlinks">
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#projects">Projects</a>
+        <a href="#why">Why Us</a>
+        <a href="#video-reviews">Reviews</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="navcta">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark mode">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <a href="#quote" class="btn btn-gold btn-sm">Request a Quote</a>
+      </div>
+      <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="blueprint-grid" id="blueGrid">
+    <svg viewBox="0 0 1200 800" preserveAspectRatio="none">
+      <defs>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M40 0H0V40" fill="none" stroke="#D4AF37" stroke-width="0.5" opacity="0.35"/>
+        </pattern>
+      </defs>
+      <rect width="1200" height="800" fill="url(#grid)"/>
+    </svg>
+  </div>
+  <div class="wrap hero-inner">
+    <div>
+      <div class="eyebrow">Est. Nairobi, Kenya</div>
+      <h1 class="serif">Building tomorrow,<br><em>today.</em></h1>
+      <p class="hero-sub">JAPELE Construction Company Ltd delivers residential, commercial and industrial projects engineered with precision and finished to a standard that speaks for itself — on time, on budget, without compromise.</p>
+      <div class="hero-actions">
+        <a href="#quote" class="btn btn-gold">Request a Quote</a>
+        <a href="#projects" class="btn btn-ghost">Our Projects</a>
+      </div>
+    </div>
+    <div class="hero-skyline">
+      <svg viewBox="0 0 420 460" fill="none">
+        <g stroke="#D4AF37" stroke-width="1.4" opacity="0.85">
+          <rect x="30" y="200" width="70" height="230" />
+          <rect x="120" y="120" width="80" height="310" />
+          <rect x="220" y="240" width="60" height="190" />
+          <rect x="300" y="60" width="90" height="370" />
+          <line x1="30" y1="230" x2="100" y2="230"/><line x1="30" y1="270" x2="100" y2="270"/><line x1="30" y1="310" x2="100" y2="310"/><line x1="30" y1="350" x2="100" y2="350"/><line x1="30" y1="390" x2="100" y2="390"/>
+          <line x1="120" y1="150" x2="200" y2="150"/><line x1="120" y1="190" x2="200" y2="190"/><line x1="120" y1="230" x2="200" y2="230"/><line x1="120" y1="270" x2="200" y2="270"/><line x1="120" y1="310" x2="200" y2="310"/><line x1="120" y1="350" x2="200" y2="350"/><line x1="120" y1="390" x2="200" y2="390"/>
+          <line x1="300" y1="90" x2="390" y2="90"/><line x1="300" y1="130" x2="390" y2="130"/><line x1="300" y1="170" x2="390" y2="170"/><line x1="300" y1="210" x2="390" y2="210"/><line x1="300" y1="250" x2="390" y2="250"/><line x1="300" y1="290" x2="390" y2="290"/><line x1="300" y1="330" x2="390" y2="330"/><line x1="300" y1="370" x2="390" y2="370"/>
+        </g>
+        <line x1="10" y1="430" x2="410" y2="430" stroke="#D4AF37" stroke-width="1.4" opacity="0.85"/>
+      </svg>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="scroll-line"></div>Scroll</div>
+</section>
+
+<section class="stats">
+  <div class="wrap">
+    <div class="stat"><b data-count="180">0</b><span>Projects Completed</span></div>
+    <div class="stat"><b data-count="150">0</b><span>Happy Clients</span></div>
+    <div class="stat"><b data-count="14">0</b><span>Years Experience</span></div>
+    <div class="stat"><b data-count="60">0</b><span>Skilled Engineers</span></div>
+    <div class="stat"><b data-count="22">0</b><span>Ongoing Projects</span></div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">About Japele</div>
+      <h2 class="serif">Fourteen years of building with precision.</h2>
+      <p>Founded on the principle that great construction is equal parts craftsmanship and discipline, JAPELE Construction Company Ltd has grown from a small residential contractor into a full-service construction and civil engineering firm trusted by developers, corporates and homeowners alike. Every project is run on the same foundation: rigorous planning, licensed expertise, and materials that last.</p>
+    </div>
+    <div class="why-grid" style="margin-top:10px;">
+      <div class="why-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 3 7v6c0 5 4 9 9 9s9-4 9-9V7l-9-5z"/></svg><div><h4>Our Mission</h4><p>Deliver structurally sound, beautifully finished projects that exceed client expectations on every metric.</p></div></div>
+      <div class="why-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg><div><h4>Our Vision</h4><p>To be the region's most trusted name in premium construction and civil engineering by 2030.</p></div></div>
+      <div class="why-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg><div><h4>Quality Assurance</h4><p>Every phase is inspected against strict internal standards before it's signed off.</p></div></div>
+      <div class="why-item"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg><div><h4>Safety Standards</h4><p>Zero-compromise site safety protocols, certified equipment and trained crews on every job.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services" style="background:var(--bg-elev);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">What We Do</div>
+      <h2 class="serif">Full-spectrum construction services.</h2>
+      <p>From first sketch to final handover — residential, commercial, industrial and civil works under one roof, each backed by licensed engineers and dedicated project managers.</p>
+    </div>
+    <div class="services-media reveal">
+      <img src="https://files.catbox.moe/t5a3p6.jpg" alt="JAPELE Construction site work" loading="lazy">
+      <div class="services-media-text">
+        <div class="eyebrow">On Every Site</div>
+        <h3>One team, every discipline.</h3>
+        <p>Licensed engineers, skilled crews and current-generation equipment working together on every service we deliver.</p>
+      </div>
+    </div>
+    <div class="services-grid reveal" id="servicesGrid"></div>
+    <div class="service-more"><a href="#quote" class="btn btn-ghost">View All 18 Services</a></div>
+  </div>
+</section>
+
+<section class="section why" id="why">
+  <div class="wrap">
+    <div class="why-left reveal">
+      <div class="eyebrow">Why Choose Japele</div>
+      <h2 class="serif">Ten reasons clients build with us twice.</h2>
+      <p>We don't win repeat business on price alone — it's the discipline behind every pour, weld and finish that keeps clients coming back.</p>
+      <a href="#quote" class="btn btn-gold" style="margin-top:32px;">Start Your Project</a>
+    </div>
+    <div class="why-grid reveal" id="whyGrid"></div>
+  </div>
+</section>
+
+<section class="section" id="projects">
+  <div class="wrap">
+    <div class="head-row section-head reveal" style="margin-bottom:20px;">
+      <div>
+        <div class="eyebrow">Portfolio</div>
+        <h2 class="serif">Selected work.</h2>
+      </div>
+      <div class="proj-filters" id="projFilters"></div>
+    </div>
+    <div class="proj-grid reveal" id="projGrid"></div>
+  </div>
+</section>
+
+<section class="section" id="showcase">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">From The Field</div>
+      <h2 class="serif">Craftsmanship you can see.</h2>
+      <p>Real sites, real finishes — a look at the standard every JAPELE project is held to.</p>
+    </div>
+    <div class="showcase-grid reveal">
+      <div class="showcase-img tall">
+        <span class="showcase-tag">On Site</span>
+        <img src="https://files.catbox.moe/amgc7b.jpg" alt="JAPELE Construction project on site" loading="lazy">
+      </div>
+      <div class="showcase-img wide">
+        <span class="showcase-tag">Completed Work</span>
+        <img src="https://files.catbox.moe/t5a3p6.jpg" alt="JAPELE Construction completed project" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="video-reviews" style="background:var(--bg-elev);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Client Video Reviews</div>
+      <h2 class="serif">Hear it from the people we've built for.</h2>
+      <p>Short video reviews straight from clients on-site, walking through the finished work.</p>
+    </div>
+    <div class="video-grid reveal">
+      <div class="video-card" onclick="playVideo('https://files.catbox.moe/fs3m1q.mp4')">
+        <video src="https://files.catbox.moe/fs3m1q.mp4" preload="metadata" muted playsinline></video>
+        <div class="video-play"><svg width="24" height="24" viewBox="0 0 24 24" fill="#161200"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="video-info"><h4>Client Review — Site Walkthrough</h4><span>WATCH REVIEW · 01</span></div>
+        <button class="video-watch-btn" onclick="event.stopPropagation(); playVideo('https://files.catbox.moe/fs3m1q.mp4')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Watch
+        </button>
+      </div>
+      <div class="video-card" onclick="playVideo('https://files.catbox.moe/bz79qy.mp4')">
+        <video src="https://files.catbox.moe/bz79qy.mp4" preload="metadata" muted playsinline></video>
+        <div class="video-play"><svg width="24" height="24" viewBox="0 0 24 24" fill="#161200"><path d="M8 5v14l11-7z"/></svg></div>
+        <div class="video-info"><h4>Client Review — Project Feedback</h4><span>WATCH REVIEW · 02</span></div>
+        <button class="video-watch-btn" onclick="event.stopPropagation(); playVideo('https://files.catbox.moe/bz79qy.mp4')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Watch
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="videoModal">
+  <div class="modal-inner">
+    <div class="modal-close" onclick="closeVideo()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </div>
+    <video id="modalVideo" controls playsinline></video>
+  </div>
+</div>
+
+<section class="section" id="testimonials" style="background:var(--bg-elev);">
+  <div class="wrap testi-wrap reveal">
+    <div class="quote-mark serif">"</div>
+    <div id="testiSlides"></div>
+    <div class="testi-dots" id="testiDots"></div>
+  </div>
+</section>
+
+<section class="section quote-section" id="quote">
+  <div class="wrap">
+    <div class="quote-grid reveal">
+      <div class="quote-left">
+        <div class="eyebrow">Get Started</div>
+        <h2 class="serif" style="margin-top:14px;">Tell us about your project.</h2>
+        <p>Share a few details and our project team will get back to you within one business day with a scoped estimate.</p>
+        <ul class="quote-points">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Free initial site consultation</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Transparent, itemised pricing</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Dedicated project manager assigned</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Licensed engineers on every job</li>
+        </ul>
+      </div>
+      <form class="quote-right" onsubmit="return handleQuoteSubmit(event)">
+        <div class="form-grid">
+          <div class="form-field"><label>Full Name</label><input required type="text" placeholder="Jane Doe"></div>
+          <div class="form-field"><label>Company Name</label><input type="text" placeholder="Optional"></div>
+          <div class="form-field"><label>Phone Number</label><input required type="tel" placeholder="07XX XXX XXX"></div>
+          <div class="form-field"><label>Email Address</label><input required type="email" placeholder="you@email.com"></div>
+          <div class="form-field"><label>Project Type</label>
+            <select><option>Residential</option><option>Commercial</option><option>Industrial</option><option>Road Construction</option><option>Renovation</option><option>Other</option></select>
+          </div>
+          <div class="form-field"><label>Project Location</label><input type="text" placeholder="Town / County"></div>
+          <div class="form-field"><label>Estimated Budget</label><input type="text" placeholder="e.g. KES 5,000,000"></div>
+          <div class="form-field"><label>Preferred Start Date</label><input type="date"></div>
+          <div class="form-field full"><label>Description of Work</label><textarea rows="4" placeholder="Tell us about the project..."></textarea></div>
+          <div class="form-field full">
+            <label>Attachment</label>
+            <label class="upload" for="fileUp">Click to upload drawings, photos or a brief (PDF, JPG, PNG)</label>
+            <input id="fileUp" type="file" style="display:none;">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-gold" style="width:100%;">Submit Request</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="wrap">
+    <div class="section-head reveal"><div class="eyebrow">Latest News</div><h2 class="serif">From the site office.</h2></div>
+    <div class="news-grid reveal" id="newsGrid"></div>
+  </div>
+</section>
+
+<section class="section cta-band">
+  <div class="wrap">
+    <h2 class="serif">Ready to build something that lasts?</h2>
+    <p>Talk to our team today — no obligation, no pressure, just an honest scope and timeline.</p>
+    <div class="hero-actions">
+      <a href="#quote" class="btn" style="background:#161200; color:var(--gold);">Request a Quote</a>
+      <a href="https://wa.me/254721837204" target="_blank" class="btn btn-ghost">Chat on WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact" style="background:var(--bg-elev);">
+  <div class="wrap contact-grid">
+    <div class="reveal">
+      <div class="eyebrow">Get In Touch</div>
+      <h2 class="serif" style="margin-top:14px; font-size:clamp(28px,3.4vw,40px);">Contact JAPELE Construction.</h2>
+      <div class="contact-list">
+        <div class="contact-item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.34 1.79.65 2.65a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.43-1.43a2 2 0 0 1 2.11-.45c.86.31 1.75.53 2.65.65A2 2 0 0 1 22 16.92z"/></svg>
+          <div><h4>Phone</h4><a href="tel:+254721837204">+254 721 837 204</a></div>
+        </div>
+        <div class="contact-item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.6 6.4A8 8 0 1 0 12 20l4 1-1-4a8 8 0 0 0 2.6-10.6z"/></svg>
+          <div><h4>WhatsApp</h4><a href="https://wa.me/254721837204" target="_blank">+254 721 837 204</a></div>
+        </div>
+        <div class="contact-item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
+          <div><h4>Email</h4><a href="mailto:peterpurrenkei48@gmail.com">peterpurrenkei48@gmail.com</a></div>
+        </div>
+        <div class="contact-item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <div><h4>Office</h4><span>Address to be confirmed</span></div>
+        </div>
+        <div class="contact-item">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <div><h4>Business Hours</h4><span>Mon – Fri, 8:00 AM – 5:30 PM · Sat 9:00 AM – 1:00 PM</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="map-block reveal">
+      <div class="map-pin"></div>
+      <div class="map-note">Google Maps will embed here once the office address is added.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#home" class="logo">
+          <svg class="logo-mark" viewBox="0 0 40 40" fill="none"><path d="M6 30 L6 14 L20 6 L34 14 L34 30 M13 30 V19 H27 V30" stroke="#D4AF37" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          JA<span class="j" style="color:#D4AF37;">PELE</span>&nbsp;CONSTRUCTION
+        </a>
+        <p>Premium residential, commercial and civil construction, built on precision, safety and craftsmanship.</p>
+        <div class="socials" style="margin-top:22px;">
+          <a href="#" aria-label="Facebook">f</a><a href="#" aria-label="Instagram">ig</a><a href="#" aria-label="LinkedIn">in</a><a href="#" aria-label="X">x</a>
+        </div>
+      </div>
+      <div class="foot-col"><h4>Company</h4><ul><li><a href="#about">About Us</a></li><li><a href="#why">Why Choose Us</a></li><li><a href="#projects">Projects</a></li><li><a href="#news">News</a></li></ul></div>
+      <div class="foot-col"><h4>Services</h4><ul><li><a href="#services">Residential</a></li><li><a href="#services">Commercial</a></li><li><a href="#services">Civil Engineering</a></li><li><a href="#services">Renovations</a></li></ul></div>
+      <div class="foot-col"><h4>Contact</h4><ul><li><a href="tel:+254721837204">+254 721 837 204</a></li><li><a href="mailto:peterpurrenkei48@gmail.com">peterpurrenkei48@gmail.com</a></li><li><a href="#quote">Request a Quote</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 JAPELE Construction Company Ltd. All rights reserved.</span>
+      <span>Design concept — content to be finalised with client</span>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/254721837204" target="_blank" class="wa-float" aria-label="Chat on WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.6 6.4A8 8 0 1 0 12 20l4 1-1-4a8 8 0 0 0 2.6-10.6z"/></svg>
+</a>
+
+<div id="cookie">
+  <p>We use cookies to improve your experience on this site. By continuing, you agree to our use of cookies.</p>
+  <div class="row">
+    <button class="btn btn-gold btn-sm" onclick="dismissCookie()">Accept</button>
+    <button class="btn btn-ghost btn-sm" onclick="dismissCookie()">Decline</button>
+  </div>
+</div>
+
+<script>
+/* ---------- data ---------- */
+const services = [
+  ["Residential Construction","Custom homes and residential developments built to exact specification."],
+  ["Commercial Construction","Office blocks, retail and mixed-use developments delivered on schedule."],
+  ["Industrial Construction","Warehouses, factories and industrial facilities engineered for scale."],
+  ["Road Construction","Access roads, drainage and infrastructure works to national standard."],
+  ["Building Renovations","Structural upgrades and refurbishments that extend a building's life."],
+  ["Interior Fit-Outs","Full interior finishing, from partitioning to final detailing."],
+  ["Civil Engineering","Site works, earthworks and civil infrastructure design and build."],
+  ["Architectural Design","Concept-to-construction architectural drawings and 3D visualisation."]
+];
+const svgIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg>`;
+const grid = document.getElementById('servicesGrid');
+services.forEach((s,i)=>{
+  grid.innerHTML += `<div class="service-card"><div class="num">0${i+1}</div><div class="service-icon">${svgIcon}</div><h3>${s[0]}</h3><p>${s[1]}</p></div>`;
+});
+
+const whyList = [
+  ["Experienced Professionals","Licensed engineers and site managers averaging 10+ years in the field."],
+  ["Modern Equipment","A maintained fleet of current-generation machinery on every site."],
+  ["High Quality Materials","Sourced from certified, vetted suppliers only."],
+  ["Timely Delivery","Milestone-driven schedules tracked and reported weekly."],
+  ["Fair Pricing","Transparent, itemised quotes with no hidden costs."],
+  ["Safety First","Zero-incident target enforced through daily site protocol."],
+  ["Innovative Solutions","Modern construction methods applied where they add real value."],
+  ["Sustainable Building","Material and energy-efficient practices built into every plan."]
+];
+const whyGrid = document.getElementById('whyGrid');
+const check = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/></svg>`;
+whyList.forEach(w=>{ whyGrid.innerHTML += `<div class="why-item"><div class="ico">${check}</div><div><h4>${w[0]}</h4><p>${w[1]}</p></div></div>`; });
+
+const projColors = [["#D4AF37","#3B3B3B"],["#0A84FF","#111111"],["#C8C8C8","#3B3B3B"],["#D4AF37","#111111"],["#3B3B3B","#0A84FF"],["#C8C8C8","#D4AF37"]];
+const projects = [
+  ["Kileleshwa Residence","Residential","Nairobi","2025"],
+  ["Westlands Office Tower","Commercial","Nairobi","2024"],
+  ["Machakos Access Road","Road Construction","Machakos","2025"],
+  ["Athi River Warehouse","Industrial","Athi River","2023"],
+  ["Runda Villa Renovation","Renovation","Nairobi","2024"],
+  ["Nakuru Retail Plaza","Commercial","Nakuru","2026"]
+];
+function skylineSVG(c1,c2){
+  return `<svg viewBox="0 0 300 380" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+    <rect width="300" height="380" fill="${c2}"/>
+    <g fill="${c1}" opacity="0.9">
+      <rect x="20" y="180" width="45" height="200"/><rect x="80" y="120" width="55" height="260"/>
+      <rect x="150" y="200" width="40" height="180"/><rect x="205" y="70" width="60" height="310"/>
+    </g>
+    <g stroke="${c2}" stroke-width="3" opacity="0.5">
+      <line x1="20" y1="210" x2="65" y2="210"/><line x1="20" y1="250" x2="65" y2="250"/><line x1="20" y1="290" x2="65" y2="290"/>
+      <line x1="80" y1="150" x2="135" y2="150"/><line x1="80" y1="190" x2="135" y2="190"/><line x1="80" y1="230" x2="135" y2="230"/><line x1="80" y1="270" x2="135" y2="270"/>
+      <line x1="205" y1="100" x2="265" y2="100"/><line x1="205" y1="140" x2="265" y2="140"/><line x1="205" y1="180" x2="265" y2="180"/><line x1="205" y1="220" x2="265" y2="220"/><line x1="205" y1="260" x2="265" y2="260"/>
+    </g>
+  </svg>`;
+}
+const projGrid = document.getElementById('projGrid');
+const eyeIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
+projects.forEach((p,i)=>{
+  const [c1,c2]=projColors[i];
+  projGrid.innerHTML += `<div class="proj-card" data-cat="${p[1]}">
+    <div class="proj-visual">${skylineSVG(c1,c2)}</div>
+    <div class="proj-view">${eyeIcon}</div>
+    <div class="proj-overlay"><span class="proj-tag">${p[1]}</span><h3>${p[0]}</h3><div class="meta"><span>${p[2]}</span><span>·</span><span>${p[3]}</span></div></div>
+  </div>`;
+});
+const cats = ["All", ...new Set(projects.map(p=>p[1]))];
+const filtersEl = document.getElementById('projFilters');
+cats.forEach((c,i)=>{
+  const chip = document.createElement('button');
+  chip.className = 'chip' + (i===0 ? ' active':'');
+  chip.textContent = c;
+  chip.onclick = ()=>{
+    document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+    chip.classList.add('active');
+    document.querySelectorAll('.proj-card').forEach(card=>{
+      card.style.display = (c==='All' || card.dataset.cat===c) ? '' : 'none';
+    });
+  };
+  filtersEl.appendChild(chip);
+});
+
+const testimonials = [
+  ["Japele delivered our office fit-out two weeks ahead of schedule without cutting a single corner on finish quality.","Amina R.","Westlands Office Tower"],
+  ["From the first site visit to handover, communication was constant and the workmanship on our home was exceptional.","David K.","Kileleshwa Residence"],
+  ["Professional, well-equipped crews and a project manager who actually picked up the phone. Highly recommend.","Grace W.","Nakuru Retail Plaza"]
+];
+const slidesEl = document.getElementById('testiSlides');
+const dotsEl = document.getElementById('testiDots');
+testimonials.forEach((t,i)=>{
+  slidesEl.innerHTML += `<div class="testi-slide${i===0?' active':''}"><p>"${t[0]}"</p><div class="stars">★★★★★</div><div class="testi-who">${t[1]}</div><div class="testi-proj">${t[2]}</div></div>`;
+  const d=document.createElement('div'); d.className='dot'+(i===0?' active':''); d.onclick=()=>showTesti(i); dotsEl.appendChild(d);
+});
+let testiIdx=0;
+function showTesti(i){
+  document.querySelectorAll('.testi-slide').forEach((s,j)=>s.classList.toggle('active', j===i));
+  document.querySelectorAll('.dot').forEach((d,j)=>d.classList.toggle('active', j===i));
+  testiIdx=i;
+}
+setInterval(()=>{ showTesti((testiIdx+1)%testimonials.length); }, 5500);
+
+const news = [
+  ["Jul 2026","Japele breaks ground on Nakuru Retail Plaza","Construction begins on our largest commercial development to date."],
+  ["Jun 2026","New fleet of modern equipment added","Investment in current-generation machinery to speed up delivery times."],
+  ["May 2026","Athi River warehouse handed over","Delivered three weeks ahead of the client's original timeline."]
+];
+const newsGrid = document.getElementById('newsGrid');
+news.forEach((n,i)=>{
+  const [c1,c2]=projColors[i];
+  newsGrid.innerHTML += `<div class="news-card"><div class="news-visual">${skylineSVG(c1,c2)}</div><div class="news-body"><div class="news-date">${n[0]}</div><h3>${n[1]}</h3><p>${n[2]}</p></div></div>`;
+});
+
+/* ---------- interactions ---------- */
+window.addEventListener('load', ()=>{ document.getElementById('loader').classList.add('hide'); });
+
+const headerEl = document.getElementById('siteHeader');
+const progressEl = document.getElementById('progress');
+window.addEventListener('scroll', ()=>{
+  headerEl.classList.toggle('scrolled', window.scrollY>40);
+  const h = document.documentElement;
+  const pct = (h.scrollTop)/(h.scrollHeight - h.clientHeight)*100;
+  progressEl.style.width = pct + '%';
+});
+
+const themeToggle = document.getElementById('themeToggle');
+themeToggle.addEventListener('click', ()=>{
+  const html=document.documentElement;
+  html.setAttribute('data-theme', html.getAttribute('data-theme')==='dark' ? 'light':'dark');
+});
+
+/* stat counters */
+const statEls = document.querySelectorAll('[data-count]');
+const statObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const el = e.target; const target = +el.dataset.count; let cur=0;
+      const step = Math.max(1, Math.round(target/60));
+      const t = setInterval(()=>{ cur+=step; if(cur>=target){cur=target; clearInterval(t);} el.textContent = cur; }, 22);
+      statObserver.unobserve(el);
+    }
+  });
+}, {threshold:.5});
+statEls.forEach(el=>statObserver.observe(el));
+
+/* reveal on scroll */
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revealObserver.unobserve(e.target); } });
+}, {threshold:.15});
+revealEls.forEach(el=>revealObserver.observe(el));
+
+/* mobile menu (simple) */
+document.getElementById('burger').addEventListener('click', ()=>{
+  const links = document.querySelector('.navlinks');
+  const open = links.style.display==='flex';
+  links.style.cssText = open ? '' : 'display:flex; flex-direction:column; position:fixed; top:70px; right:20px; background:var(--bg-elev); border:1px solid var(--line); border-radius:16px; padding:20px 28px; gap:18px; z-index:950;';
+});
+
+/* cookie consent */
+setTimeout(()=>{ document.getElementById('cookie').classList.add('show'); }, 1400);
+function dismissCookie(){ document.getElementById('cookie').classList.remove('show'); }
+
+/* video review modal */
+const videoModal = document.getElementById('videoModal');
+const modalVideo = document.getElementById('modalVideo');
+function playVideo(src){
+  modalVideo.src = src;
+  videoModal.classList.add('open');
+  modalVideo.play().catch(()=>{});
+  document.body.style.overflow = 'hidden';
+}
+function closeVideo(){
+  modalVideo.pause();
+  modalVideo.currentTime = 0;
+  videoModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
+videoModal.addEventListener('click', (e)=>{ if(e.target===videoModal) closeVideo(); });
+document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeVideo(); });
+
+/* quote form (front-end only demo) */
+function handleQuoteSubmit(e){
+  e.preventDefault();
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.textContent = 'Request Sent ✓';
+  btn.style.background = '#2fae5b';
+  setTimeout(()=>{ btn.textContent='Submit Request'; btn.style.background=''; e.target.reset(); }, 2600);
+  return false;
+}
+</script>
+</body>
+</html>
